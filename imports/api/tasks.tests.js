@@ -10,7 +10,8 @@ if (Meteor.isServer) {
   describe('Tasks', () => {
     describe('methods', () => {
       const userId = Random.id();
-      let taskIdPublic;
+      let taskIdPublic,
+          taskIdPrivate;
 
       beforeEach(() => {
         Tasks.remove({});
