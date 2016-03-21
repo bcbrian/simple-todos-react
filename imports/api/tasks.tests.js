@@ -63,8 +63,7 @@ if (Meteor.isServer) {
         // Run the method with `this` set to the fake invocation
         const expectedError= deleteTask.apply(invocation, [taskIdPrivate]);
         // Verify that the method does what we expected
-        assert.equal(expectedError.error, "Access Denied");
-        assert.equal(expectedError.message, "Cannot remove the task because you do not own it.");
+        assert.equal(Tasks.find().count(), 2);
       });
     });
   });

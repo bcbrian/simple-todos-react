@@ -32,10 +32,6 @@ Meteor.methods({
     check(taskId, String);
 
     const task = Tasks.findOne(taskId);
-    if (task.private && task.owner !== Meteor.userId()) {
-      // If the task is private, make sure only the owner can delete it
-      return {error:"Access Denied", message:"Cannot remove the task because you do not own it."};
-    }
 
     Tasks.remove(taskId);
   },
