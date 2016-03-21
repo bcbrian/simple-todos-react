@@ -8,12 +8,7 @@ if (Meteor.isServer) {
   // This code only runs on the server
   // Only publish tasks that are public or belong to the current user
   Meteor.publish('tasks', function tasksPublication() {
-    return Tasks.find({
-      $or: [
-        { private: { $ne: true } },
-        { owner: this.userId },
-      ],
-    });
+    return Tasks.find({});
   });
 }
 
@@ -39,7 +34,7 @@ Meteor.methods({
     const task = Tasks.findOne(taskId);
     if (task.private && task.owner !== Meteor.userId()) {
       // If the task is private, make sure only the owner can delete it
-      throw new Meteor.Error('not-authorized');
+      return {error:"Access Denied", message:"Cannot remove the task because you do not own it."};
     }
 
     Tasks.remove(taskId);
@@ -51,7 +46,7 @@ Meteor.methods({
     const task = Tasks.findOne(taskId);
     if (task.private && task.owner !== Meteor.userId()) {
       // If the task is private, make sure only the owner can check it off
-      throw new Meteor.Error('not-authorized');
+     return {error:"Access Denied", message:"Cannot mark completed the task because you do not own it."};
     }
 
     Tasks.update(taskId, { $set: { checked: setChecked } });
@@ -64,7 +59,7 @@ Meteor.methods({
 
     // Make sure only the task owner can make a task private
     if (task.owner !== Meteor.userId()) {
-      throw new Meteor.Error('not-authorized');
+      return {error:"Access Denied", message:"Cannot set private the task because you do not own it."};
     }
 
     Tasks.update(taskId, { $set: { private: setToPrivate } });
